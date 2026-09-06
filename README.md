@@ -1,3 +1,3 @@
 # Northbridge Trust
 
-Website project repository.
+Responsive Vite/React demonstration workspace. It is intentionally local-only and does not connect to real banking, payment, or money-transfer rails.
