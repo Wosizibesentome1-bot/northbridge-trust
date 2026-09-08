@@ -5,197 +5,47 @@ const currencies = ['USD','CAD','GBP','EUR','NGN','GHS','ZAR','AED','ILS','JPY',
 
 type User = { name: string; email: string; currency: string };
 
-function getUser(): User | null {
-  try {
-    const raw = localStorage.getItem(KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
-}
-
-function go(path: string) {
-  window.location.hash = path;
-}
+function getUser(): User | null { try { const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; } catch { return null; } }
+function go(path: string) { window.location.hash = path; }
 
 export default function App() {
   const [route, setRoute] = useState(window.location.hash || '#/');
   const [user, setUser] = useState<User | null>(getUser());
-
-  useEffect(() => {
-    const onHash = () => setRoute(window.location.hash || '#/');
-    window.addEventListener('hashchange', onHash);
-    return () => window.removeEventListener('hashchange', onHash);
-  }, []);
-
-  const saveUser = (next: User) => {
-    localStorage.setItem(KEY, JSON.stringify(next));
-    setUser(next);
-    go('/dashboard');
-  };
-
+  useEffect(() => { const onHash = () => setRoute(window.location.hash || '#/'); window.addEventListener('hashchange', onHash); return () => window.removeEventListener('hashchange', onHash); }, []);
+  const saveUser = (next: User) => { localStorage.setItem(KEY, JSON.stringify(next)); setUser(next); go('/dashboard'); };
   if (route === '#/dashboard') return <Dashboard user={user} />;
   if (route === '#/auth') return <Auth />;
   if (route === '#/register') return <Register onComplete={saveUser} />;
   if (route === '#/login') return <Login onComplete={() => go('/dashboard')} />;
-  return <Landing />;
+  return <Landing user={user} />;
 }
 
-function Header() {
-  return (
-    <header className="public-header">
-      <button className="brand" onClick={() => go('/')} aria-label="Northbridge Trust home">
-        <strong>NORTHBRIDGE TRUST</strong><small>FINANCIAL</small>
-      </button>
-    </header>
-  );
+function Header({ user }: { user?: User | null }) {
+  return <header className='public-header'><button className='brand' onClick={() => go('/')} aria-label='Northbridge Trust home'><strong>NORTHBRIDGE TRUST</strong><small>FINANCIAL</small></button><nav aria-label='Primary navigation'><a href='#/' >Home</a><a href='#features'>Personal</a><a href='#business'>Business</a><a href='#services'>Services</a><a href='#about'>About</a></nav><div className='header-actions'><button className='header-signin' onClick={() => go(user ? '/dashboard' : '/login')}>{user ? 'Dashboard' : 'Sign in'}</button><button onClick={() => go(user ? '/dashboard' : '/register')}>{user ? 'Dashboard' : 'Create account'}</button></div></header>;
 }
 
-function Landing() {
-  return (
-    <div className="site page-screen landing-screen">
-      <Header />
-      <main className="landing-main">
-        <section className="hero landing-hero">
-          <div className="hero-copy">
-            <span className="eyebrow">MODERN FINANCIAL MANAGEMENT</span>
-            <h1>Financial tools designed around the way you manage money.</h1>
-            <p>Explore a clean digital workspace for account information, activity and everyday financial-management tools.</p>
-            <div className="landing-actions">
-              <button onClick={() => go('/auth')}>Get started</button>
-              <button className="text-button" onClick={() => go('/auth')}>Discover Northbridge <span>→</span></button>
-            </div>
-          </div>
-          <div className="hero-visual">
-            <div className="hero-card">
-              <div className="hero-card-top"><span>NORTHBRIDGE TRUST</span><span className="status-pill">ACCOUNT</span></div>
-              <span className="hero-card-label">Financial workspace</span>
-              <strong>Simple. Clear. Organized.</strong>
-              <div className="hero-card-line"><span>Account activity</span><b>Explore →</b></div>
-              <div className="hero-bars"><i/><i/><i/><i/><i/><i/></div>
-            </div>
-          </div>
-        </section>
-
-        <section className="finance-gallery" aria-label="Northbridge Trust financial services">
-          <article className="finance-gallery-card finance-gallery-feature">
-            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=85" alt="Financial documents and planning" />
-            <div><span>PERSONAL FINANCE</span><strong>Organize everyday financial planning and account information.</strong></div>
-          </article>
-          <article className="finance-gallery-card">
-            <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1000&q=85" alt="Digital payment and banking workspace" />
-            <div><span>BANK TRANSFERS</span><strong>Clear digital transfer and payment workflows.</strong></div>
-          </article>
-          <article className="finance-gallery-card">
-            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=85" alt="Cash and card payment workspace" />
-            <div><span>ACCOUNT SERVICES</span><strong>Keep account and payment information organized.</strong></div>
-          </article>
-          <article className="finance-gallery-card">
-            <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1000&q=85" alt="Loan paperwork and financial documents" />
-            <div><span>LOAN SERVICES</span><strong>Explore personal and business lending information.</strong></div>
-          </article>
-          <article className="finance-gallery-card finance-gallery-gold">
-            <img src="https://images.unsplash.com/photo-1610375461246-83df859d849d?auto=format&fit=crop&w=1000&q=85" alt="Gold bars representing gold-backed finance" />
-            <div><span>GOLD-BACKED FINANCE</span><strong>Learn about finance options involving eligible gold assets.</strong></div>
-          </article>
-        </section>
-
-        <section className="landing-preview">
-          <article><b>01</b><h2>Account overview</h2><p>Review account information in one organized place.</p></article>
-          <article><b>02</b><h2>Financial activity</h2><p>Follow a clear visual record of activity and workflows.</p></article>
-          <article><b>03</b><h2>Responsive design</h2><p>Use the experience comfortably on phones, tablets and desktops.</p></article>
-        </section>
-        <div className="prototype-notice">Northbridge Trust prototype — no real funds, payment rails or banking credentials are connected.</div>
-      </main>
-    </div>
-  );
+function Landing({ user }: { user: User | null }) {
+  return <div className='site'><div className='utility-bar'><div>Personal finance, business tools and everyday account management</div><div className='utility-links'><span>24/7 digital access</span><span>Secure account experience</span></div></div><Header user={user}/><main className='landing-main'>
+    <section className='hero landing-hero'><div className='hero-copy'><span className='eyebrow'>MODERN FINANCIAL MANAGEMENT</span><h1>Banking tools designed around the way you manage money.</h1><p>Bring your accounts, transfers, cards and financial activity together in one clean digital workspace built for everyday control.</p><div className='landing-actions'><button onClick={() => go(user ? '/dashboard' : '/register')}>Get started</button><a href='#features'>Discover Apex <span>→</span></a></div><div className='finance-gallery' aria-label='Finance services and loan options'><GalleryCard cls='finance-gallery-feature' src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=88' alt='Finance professional reviewing financial information' label='FINANCIAL INSIGHT' text='Clearer tools for everyday money management.'/><GalleryCard src='https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1000&q=88' alt='Personal loan and financial planning' label='PERSONAL LOANS' text='Flexible personal finance options.'/><GalleryCard src='https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1000&q=88' alt='Business loan and financial documents' label='BUSINESS LOANS' text='Finance built around growing businesses.'/><GalleryCard src='https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1000&q=88' alt='Property and mortgage finance concept' label='PROPERTY FINANCE' text='Plan major property purchases with clarity.'/><GalleryCard cls='finance-gallery-gold' src='https://images.unsplash.com/photo-1610375461246-83df859d849d?auto=format&fit=crop&w=1000&q=88' alt='Gold bars representing gold-backed lending' label='GOLD-BACKED LOANS' text='Explore lending options secured by eligible gold assets.'/></div><div className='trust-row'><span>✓ Clear account activity</span><span>✓ Responsive on every screen</span><span>✓ Simple digital access</span></div></div><div className='hero-visual'><div className='hero-card'><div className='hero-card-top'><span>NORTHBRIDGE TRUST ACCOUNT</span><span className='status-pill'>ACTIVE</span></div><span className='hero-card-label'>Available balance</span><strong>$24,680.50</strong><div className='hero-card-line'><span>Account activity</span><b>View details →</b></div><div className='hero-bars'><i/><i/><i/><i/><i/><i/></div></div><div className='floating-card floating-card-one'><span>Transfer</span><b>Fast &amp; clear</b></div><div className='floating-card floating-card-two'><span>Account tools</span><b>All in one place</b></div></div></section>
+    <section className='intro-section' id='features'><div className='intro-copy'><span className='eyebrow'>NORTHBRIDGE TRUST FINANCIAL</span><h2>More than a dashboard. A simpler way to stay in control.</h2><p>Apex brings the core tools you need into one organized experience, so you can review balances, understand activity and move through your financial tasks without unnecessary clutter.</p><a className='text-link' href='#services'>Explore our services →</a></div><div className='intro-stats'><Stat n='01' t='Account overview' p='See your key balances and activity at a glance.'/><Stat n='02' t='Transfers' p='Move through transfer workflows with clear review steps.'/><Stat n='03' t='Account tools' p='Manage cards, profile information and connected account features.'/></div></section>
+    <section id='services' className='landing-section services-section'><div className='section-heading'><span className='eyebrow'>OUR SERVICES</span><h2>Everything organized around your financial life.</h2><p>Explore a focused set of digital tools for managing everyday account activity.</p></div><div className='service-grid'><Card title='Personal accounts' text='Keep your everyday account information organized and accessible from one responsive dashboard.'/><Card title='Digital transfers' text='Review transfer details, destinations and amounts through a straightforward guided workflow.'/><Card title='Cards & payments' text='Keep card-related information and payment activity within the same account experience.'/><Card title='Business banking' text='Give business finances a clear home for account organization and financial activity.'/><Card title='Account analytics' text='Understand balances and activity with simple, readable account insights.'/><Card title='Secure access' text='Use a dedicated sign-in experience with account controls designed for modern devices.'/></div></section>
+    <section id='business' className='landing-section split-section business-section'><div className='business-copy'><span className='eyebrow'>FOR BUSINESS</span><h2>A workspace that keeps business finances moving.</h2><p>Organize business account activity, transfers and financial information in a single experience that adapts from desktop to phone.</p><button onClick={() => go(user ? '/dashboard' : '/register')}>Explore business banking</button></div><div className='business-panel'><div className='business-panel-head'><span>BUSINESS OVERVIEW</span><b>NORTHBRIDGE TRUST</b></div><div className='business-balance'><span>Operating balance</span><strong>$128,420.00</strong></div><div className='business-list'><div><span>Incoming activity</span><b>+$18,420</b></div><div><span>Outgoing activity</span><b>-$7,840</b></div><div><span>Scheduled items</span><b>08</b></div></div></div></section>
+    <section className='about-feature' id='about'><img src='https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=1200&q=85' alt='Financial planning and market analysis workspace'/><div><span className='eyebrow'>ABOUT</span><h2>Built around clearer financial decisions.</h2><p>Northbridge Trust brings account information, activity and everyday financial tools into one organized digital workspace, with an experience designed to stay clear on both desktop and mobile.</p></div></section>
+    <section className='how-section'><div className='section-heading'><span className='eyebrow'>HOW IT WORKS</span><h2>Getting started is simple.</h2><p>Move from account setup to everyday management in a few clear steps.</p></div><div className='steps-grid'><Step n='01' t='Open an account' p='Create your Northbridge Trust account and enter the digital workspace.'/><Step n='02' t='Verify access' p='Complete the available account verification and sign-in flow.'/><Step n='03' t='Manage your activity' p='Review balances, transactions, transfers and account tools.'/><Step n='04' t='Stay in control' p='Return whenever you need a clear view of your account activity.'/></div></section>
+    <section className='card-feature-section'><div className='card-feature-visual'><div className='bank-card'><div className='bank-card-top'><span>NORTHBRIDGE TRUST</span><span>DEBIT</span></div><div className='chip'/><div className='bank-card-number'>•••• •••• •••• 4821</div><div className='bank-card-bottom'><span>NORTHBRIDGE TRUST MEMBER</span><b>09/29</b></div></div></div><div className='card-feature-copy'><span className='eyebrow'>CARDS &amp; ACCESS</span><h2>Keep everyday spending connected to your account.</h2><p>Designed as part of the Northbridge Trust account experience, card tools give you a clear place to review payment-related activity and account access.</p><div className='feature-checks'><span>✓ Simple account access</span><span>✓ Clear payment activity</span><span>✓ Mobile-friendly experience</span></div><button onClick={() => go(user ? '/dashboard' : '/register')}>View account</button></div></section>
+    <section className='callout-section'><span className='eyebrow'>READY WHEN YOU ARE</span><h2>Build a clearer financial routine with Northbridge.</h2><p>Open the digital experience and explore your account tools, activity and transfer workflows.</p><button onClick={() => go(user ? '/dashboard' : '/register')}>Get started with Northbridge</button></section><section className='notice'>Northbridge Trust — Institute</section>
+  </main><footer className='landing-footer'><div><button className='brand footer-brand' onClick={() => go('/')}><strong>NORTHBRIDGE TRUST</strong><small>FINANCIAL</small></button><p>Digital financial-management workspace.</p></div><div className='footer-links'><a href='#features'>Personal</a><a href='#business'>Business</a><a href='#services'>Services</a></div><div><span>© Northbridge Trust</span><small>Portal Workspace</small></div></footer></div>;
 }
 
-function Auth() {
-  return (
-    <div className="page-screen auth-screen">
-      <Header />
-      <main className="auth-main">
-        <div className="auth-card">
-          <button className="back-link" onClick={() => go('/')}>← Back to home</button>
-          <span className="eyebrow">WELCOME</span>
-          <h1>Access your workspace</h1>
-          <p>Choose how you want to continue.</p>
-          <div className="auth-buttons">
-            <button onClick={() => go('/register')}>Create an account</button>
-            <button className="secondary-button" onClick={() => go('/login')}>Log in</button>
-          </div>
-          <div className="prototype-notice">Prototype only. Do not enter real banking passwords or financial credentials.</div>
-        </div>
-      </main>
-    </div>
-  );
-}
+function GalleryCard({cls='',src,alt,label,text}:{cls?:string;src:string;alt:string;label:string;text:string}){return <article className={'finance-gallery-card '+cls}><img src={src} alt={alt}/><div><span>{label}</span><strong>{text}</strong></div></article>}
+function Stat({n,t,p}:{n:string;t:string;p:string}){return <div><strong>{n}</strong><span>{t}</span><p>{p}</p></div>}
+function Step({n,t,p}:{n:string;t:string;p:string}){return <div><b>{n}</b><h3>{t}</h3><p>{p}</p></div>}
+function Card({title,text}:{title:string;text:string}){return <article className='card'><h3>{title}</h3><p>{text}</p></article>}
 
-function Register({ onComplete }: { onComplete: (u: User) => void }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [currency, setCurrency] = useState('USD');
+function Auth(){return <div className='page-screen auth-screen'><Header/><main className='auth-main'><div className='auth-card'><button className='back-link' onClick={()=>go('/')}>← Back to home</button><span className='eyebrow'>WELCOME</span><h1>Access your workspace</h1><p>Choose how you want to continue.</p><div className='auth-buttons'><button onClick={()=>go('/register')}>Create an account</button><button className='secondary-button' onClick={()=>go('/login')}>Log in</button></div><div className='prototype-notice'>Prototype only. Do not enter real banking passwords or financial credentials.</div></div></main></div>}
 
-  return (
-    <div className="page-screen form-screen">
-      <Header />
-      <main className="form-main">
-        <form className="form-card" onSubmit={(e) => { e.preventDefault(); onComplete({ name: name || 'Northbridge User', email: email || 'user@example.com', currency }); }}>
-          <button type="button" className="back-link" onClick={() => go('/auth')}>← Back</button>
-          <span className="eyebrow">CREATE ACCOUNT</span>
-          <h1>Create your account</h1>
-          <p>Set up a prototype workspace to explore the interface.</p>
-          <label>Full name<input required value={name} onChange={e => setName(e.target.value)} placeholder="Enter your full name" /></label>
-          <label>Email address<input required type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Enter your email address" /></label>
-          <label>Account currency<select value={currency} onChange={e => setCurrency(e.target.value)}>{currencies.map(c => <option key={c}>{c}</option>)}</select></label>
-          <button type="submit">Create account</button>
-          <div className="prototype-notice">Prototype account only — no real account or funds are created.</div>
-        </form>
-      </main>
-    </div>
-  );
-}
+function Register({onComplete}:{onComplete:(u:User)=>void}){const[name,setName]=useState('');const[email,setEmail]=useState('');const[currency,setCurrency]=useState('USD');return <div className='page-screen form-screen'><Header/><main className='form-main'><form className='form-card' onSubmit={e=>{e.preventDefault();onComplete({name:name||'Northbridge User',email:email||'user@example.com',currency})}}><button type='button' className='back-link' onClick={()=>go('/auth')}>← Back</button><span className='eyebrow'>CREATE ACCOUNT</span><h1>Create your account</h1><p>Set up a prototype workspace to explore the interface.</p><label>Full name<input required value={name} onChange={e=>setName(e.target.value)} placeholder='Enter your full name'/></label><label>Email address<input required type='email' value={email} onChange={e=>setEmail(e.target.value)} placeholder='Enter your email address'/></label><label>Account currency<select value={currency} onChange={e=>setCurrency(e.target.value)}>{currencies.map(c=><option key={c}>{c}</option>)}</select></label><button type='submit'>Create account</button><div className='prototype-notice'>Prototype account only — no real account or funds are created.</div></form></main></div>}
 
-function Login({ onComplete }: { onComplete: () => void }) {
-  return (
-    <div className="page-screen form-screen">
-      <Header />
-      <main className="form-main">
-        <form className="form-card" onSubmit={(e) => { e.preventDefault(); onComplete(); }}>
-          <button type="button" className="back-link" onClick={() => go('/auth')}>← Back</button>
-          <span className="eyebrow">LOG IN</span>
-          <h1>Welcome back</h1>
-          <p>Enter the prototype account details below.</p>
-          <label>Email address<input required type="email" placeholder="Enter your email address" /></label>
-          <label>Prototype password<input required type="password" placeholder="Enter password" /></label>
-          <button type="submit">Log in</button>
-          <div className="prototype-notice">Prototype only. No real authentication service is connected.</div>
-        </form>
-      </main>
-    </div>
-  );
-}
+function Login({onComplete}:{onComplete:()=>void}){return <div className='page-screen form-screen'><Header/><main className='form-main'><form className='form-card' onSubmit={e=>{e.preventDefault();onComplete()}}><button type='button' className='back-link' onClick={()=>go('/auth')}>← Back</button><span className='eyebrow'>LOG IN</span><h1>Welcome back</h1><p>Enter the prototype account details below.</p><label>Email address<input required type='email' placeholder='Enter your email address'/></label><label>Prototype password<input required type='password' placeholder='Enter password'/></label><button type='submit'>Log in</button><div className='prototype-notice'>Prototype only. No real authentication service is connected.</div></form></main></div>}
 
-function Dashboard({ user }: { user: User | null }) {
-  const displayName = user?.name || 'Northbridge User';
-  const currency = user?.currency || 'USD';
-  const formatter = new Intl.NumberFormat(undefined, { style: 'currency', currency });
-
-  return (
-    <div className="dashboard-screen">
-      <header className="dashboard-header">
-        <button className="brand" onClick={() => go('/dashboard')}><strong>NORTHBRIDGE TRUST</strong><small>FINANCIAL</small></button>
-        <button className="exit-button" onClick={() => go('/')}>Exit</button>
-      </header>
-      <main className="dashboard-main">
-        <section className="welcome-row"><div><span className="eyebrow">ACCOUNT WORKSPACE</span><h1>Welcome, {displayName}</h1></div><span className="currency-pill">{currency}</span></section>
-        <section className="balance-card"><span>Available balance</span><strong>{formatter.format(0)}</strong><small>Prototype account balance</small></section>
-        <section className="dashboard-actions">
-          {['Send','Receive','Deposit','More'].map(action => <button key={action} onClick={() => alert(`${action} is a prototype interface action.`)}>{action}</button>)}
-        </section>
-        <section className="activity-card"><div className="section-head"><h2>Recent activity</h2><span>View all</span></div><div className="empty-state">No recent activity</div></section>
-        <div className="prototype-notice">Northbridge Trust prototype — balances and transactions shown here are not connected to real money or banking systems.</div>
-      </main>
-      <nav className="bottom-nav"><button className="active">Home</button><button onClick={() => alert('Transfer is a prototype interface action.')}>Transfer</button><button onClick={() => alert('Activity is a prototype interface action.')}>Activity</button><button onClick={() => alert('Profile is a prototype interface action.')}>Profile</button></nav>
-    </div>
-  );
-}
+function Dashboard({user}:{user:User|null}){const displayName=user?.name||'Northbridge User';const currency=user?.currency||'USD';const formatter=new Intl.NumberFormat(undefined,{style:'currency',currency});return <div className='dashboard-screen'><header className='dashboard-header'><button className='brand' onClick={()=>go('/dashboard')}><strong>NORTHBRIDGE TRUST</strong><small>FINANCIAL</small></button><button className='exit-button' onClick={()=>go('/')}>Exit</button></header><main className='dashboard-main'><section className='welcome-row'><div><span className='eyebrow'>ACCOUNT WORKSPACE</span><h1>Welcome, {displayName}</h1></div><span className='currency-pill'>{currency}</span></section><section className='balance-card'><span>Available balance</span><strong>{formatter.format(0)}</strong><small>Prototype account balance</small></section><section className='dashboard-actions'>{['Send','Receive','Deposit','More'].map(action=><button key={action} onClick={()=>alert(`${action} is a prototype interface action.`)}>{action}</button>)}</section><section className='activity-card'><div className='section-head'><h2>Recent activity</h2><span>View all</span></div><div className='empty-state'>No recent activity</div></section><div className='prototype-notice'>Northbridge Trust prototype — balances and transactions shown here are not connected to real money or banking systems.</div></main><nav className='bottom-nav'><button className='active'>Home</button><button onClick={()=>alert('Transfer is a prototype interface action.')}>Transfer</button><button onClick={()=>alert('Activity is a prototype interface action.')}>Activity</button><button onClick={()=>alert('Profile is a prototype interface action.')}>Profile</button></nav></div>}
