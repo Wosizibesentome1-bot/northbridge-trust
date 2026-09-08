@@ -74,6 +74,30 @@ function Landing() {
             </div>
           </div>
         </section>
+
+        <section className="finance-gallery" aria-label="Northbridge Trust financial services">
+          <article className="finance-gallery-card finance-gallery-feature">
+            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=85" alt="Financial documents and planning" />
+            <div><span>PERSONAL FINANCE</span><strong>Organize everyday financial planning and account information.</strong></div>
+          </article>
+          <article className="finance-gallery-card">
+            <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1000&q=85" alt="Digital payment and banking workspace" />
+            <div><span>BANK TRANSFERS</span><strong>Clear digital transfer and payment workflows.</strong></div>
+          </article>
+          <article className="finance-gallery-card">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=85" alt="Cash and card payment workspace" />
+            <div><span>ACCOUNT SERVICES</span><strong>Keep account and payment information organized.</strong></div>
+          </article>
+          <article className="finance-gallery-card">
+            <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1000&q=85" alt="Loan paperwork and financial documents" />
+            <div><span>LOAN SERVICES</span><strong>Explore personal and business lending information.</strong></div>
+          </article>
+          <article className="finance-gallery-card finance-gallery-gold">
+            <img src="https://images.unsplash.com/photo-1610375461246-83df859d849d?auto=format&fit=crop&w=1000&q=85" alt="Gold bars representing gold-backed finance" />
+            <div><span>GOLD-BACKED FINANCE</span><strong>Learn about finance options involving eligible gold assets.</strong></div>
+          </article>
+        </section>
+
         <section className="landing-preview">
           <article><b>01</b><h2>Account overview</h2><p>Review account information in one organized place.</p></article>
           <article><b>02</b><h2>Financial activity</h2><p>Follow a clear visual record of activity and workflows.</p></article>
