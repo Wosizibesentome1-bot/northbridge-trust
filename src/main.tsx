@@ -5,4 +5,5 @@ import './index.css';
 import './midnight.css';
 import './otp-registration.css';
 import './otp-registration';
+import './persistent-account';
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);
