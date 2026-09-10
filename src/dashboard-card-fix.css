@@ -1,0 +1,4 @@
+/* Dashboard mobile layout: remove the secondary card and bring actions directly below the balance. */
+.dashboard-grid .mini-card-preview{display:none!important}
+.dashboard-grid{grid-template-columns:1fr!important}
+.dashboard-grid .modern-balance{grid-column:1 / -1!important;width:100%!important}
