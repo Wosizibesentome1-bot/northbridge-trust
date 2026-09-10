@@ -7,8 +7,37 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Global Northbridge Trust loading animation -->
-    <script src="./loading.js?v=3"></script>
+    <script>
+    (function(){
+      var busy=false;
+      function styles(){
+        if(document.getElementById('nb-loader-style')) return;
+        var s=document.createElement('style'); s.id='nb-loader-style';
+        s.textContent='#nb-loading-screen{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 45%,#123f72 0,#071b36 45%,#020914 100%);color:#fff;font-family:Inter,system-ui,sans-serif;text-align:center}#nb-loading-screen .box{width:280px}#nb-loading-screen .logo{font-size:18px;font-weight:800;letter-spacing:.16em;color:#20bfff;margin-bottom:28px}#nb-loading-screen .rings{position:relative;width:190px;height:190px;margin:auto}#nb-loading-screen .ring{position:absolute;left:50%;top:50%;border:2px solid rgba(32,191,255,.65);border-radius:50%;transform:translate(-50%,-50%);animation:nbpulse 1s ease-in-out infinite}#nb-loading-screen .r1{width:65px;height:65px}.r2{width:105px;height:105px;animation-delay:.15s!important}.r3{width:150px;height:150px;animation-delay:.3s!important}#nb-loading-screen .spin{position:absolute;left:50%;top:50%;width:150px;height:150px;border:3px solid transparent;border-top-color:#20bfff;border-right-color:#168fff;border-radius:50%;transform:translate(-50%,-50%);animation:nbspin .8s linear infinite}#nb-loading-screen .core{position:absolute;left:50%;top:50%;width:28px;height:28px;border-radius:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#20bfff,#665cff);box-shadow:0 0 30px #20bfff}#nb-loading-screen .title{font-size:20px;font-weight:800;margin-top:20px}#nb-loading-screen .sub{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9db3cc;margin-top:8px}#nb-loading-screen .bar{height:3px;width:250px;margin:20px auto 0;background:#20bfff;transform-origin:left;animation:nbbar 1s linear forwards}@keyframes nbspin{to{transform:translate(-50%,-50%) rotate(360deg)}}@keyframes nbpulse{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.94)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}@keyframes nbbar{from{transform:scaleX(0)}to{transform:scaleX(1)}}';
+        document.head.appendChild(s);
+      }
+      function show(){
+        styles();
+        var old=document.getElementById('nb-loading-screen'); if(old) old.remove();
+        var d=document.createElement('div'); d.id='nb-loading-screen';
+        d.innerHTML='<div class="box"><div class="logo">NORTHBRIDGE TRUST</div><div class="rings"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="spin"></div><div class="core"></div></div><div class="title">Loading...</div><div class="sub">Secure banking platform</div><div class="bar"></div></div>';
+        document.body.appendChild(d);
+      }
+      document.addEventListener('click',function(e){
+        if(busy) return;
+        var el=e.target && e.target.closest ? e.target.closest('button,a,[role="button"]') : null;
+        if(!el || el.disabled || el.closest('#nb-loading-screen')) return;
+        if(el.tagName==='A' && el.getAttribute('href') && el.getAttribute('href').indexOf('#')!==0) return;
+        e.preventDefault(); e.stopPropagation(); if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+        busy=true; show();
+        setTimeout(function(){
+          var screen=document.getElementById('nb-loading-screen'); if(screen) screen.remove();
+          busy=false;
+          el.click();
+        },1000);
+      },true);
+    })();
+    </script>
     <script type="module" src="./src/main.tsx"></script>
     <script src="./logout.js"></script>
 </body>
