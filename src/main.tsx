@@ -6,6 +6,8 @@ import './midnight.css';
 import './persistent-account';
 import './page-navigation.css';
 import './page-navigation';
+import './global-loading';
+import './dashboard-card-fix.css';
 import { startGlobalLoading } from './global-loading';
 
 startGlobalLoading();
