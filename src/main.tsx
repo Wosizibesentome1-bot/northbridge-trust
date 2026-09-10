@@ -8,4 +8,7 @@ import './otp-registration';
 import './persistent-account';
 import './page-navigation.css';
 import './page-navigation';
+import { startGlobalLoading } from './global-loading';
+
+startGlobalLoading();
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);
