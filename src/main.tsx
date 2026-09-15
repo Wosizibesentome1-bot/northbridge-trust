@@ -8,6 +8,7 @@ import './page-navigation.css';
 import './page-navigation';
 import { startGlobalLoading } from './global-loading';
 import './dashboard-card-fix.css';
+import './mobile-header-fix.css';
 
 startGlobalLoading();
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);
