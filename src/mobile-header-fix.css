@@ -1,0 +1,111 @@
+/* Mobile header layout fix: keep the Northbridge Trust brand, auth buttons, and nav on separate clean rows. */
+@media (max-width: 800px) {
+  .site .public-header {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas:
+      "brand actions"
+      "nav nav" !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 14px 18px 12px !important;
+    gap: 12px !important;
+    overflow: visible !important;
+  }
+
+  .site .public-header .brand {
+    grid-area: brand !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+    overflow: hidden !important;
+  }
+
+  .site .public-header .brand strong {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+    font-size: clamp(16px, 5.2vw, 21px) !important;
+    line-height: 1.1 !important;
+    letter-spacing: .075em !important;
+  }
+
+  .site .public-header .brand small {
+    display: block !important;
+    margin-top: 3px !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+    letter-spacing: .18em !important;
+  }
+
+  .site .public-header .header-actions {
+    grid-area: actions !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 7px !important;
+    width: auto !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .site .public-header .header-actions button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    padding: 10px 13px !important;
+    border-radius: 999px !important;
+    font-size: 11px !important;
+    line-height: 1 !important;
+  }
+
+  .site .public-header nav {
+    grid-area: nav !important;
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 8px 0 2px !important;
+    gap: 20px !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none !important;
+    border-top: 1px solid rgba(228,231,236,.8) !important;
+  }
+
+  .site .public-header nav::-webkit-scrollbar { display: none !important; }
+  .site .public-header nav a {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    font-size: 13px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .site .public-header { padding-left: 15px !important; padding-right: 15px !important; gap: 10px !important; }
+  .site .public-header .brand strong { font-size: 17px !important; letter-spacing: .065em !important; }
+  .site .public-header .header-actions { gap: 5px !important; }
+  .site .public-header .header-actions button { padding: 9px 10px !important; font-size: 10px !important; }
+  .site .public-header nav { gap: 17px !important; }
+}
+
+@media (max-width: 350px) {
+  .site .public-header { grid-template-columns: 1fr !important; grid-template-areas: "brand" "actions" "nav" !important; }
+  .site .public-header .header-actions { justify-content: flex-start !important; width: 100% !important; }
+  .site .public-header .header-actions button { flex: 1 1 0 !important; }
+}
